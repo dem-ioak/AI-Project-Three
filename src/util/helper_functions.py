@@ -152,9 +152,9 @@ def preprocess_data_t1(image_data, label_data, processing=None):
 
 def preprocess_data_t2(data, processing=None):
     """Task 2 preprocessing"""
-    image_data, is_safe_data, third_wire = data.image_data, data.is_safe, data.third_wires
+    image_data, labels_data, third_wire = data.image_data, data.labels, data.third_wires
     dangerous_images, dangerous_third_wire = [], []
-    for i in range(len(is_safe_data)):
+    for i in range(len(labels_data)):
         dangerous_images.append(image_data[i])
         dangerous_third_wire.append(third_wire[i])
         

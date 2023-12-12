@@ -82,7 +82,7 @@ class ImageGenerator:
 
             # Determine which should be cut (if dangerous)
             if i == 2:
-                third_wire = curr_color
+                third_wire = curr_color.value
             
             # Handle marking an image as DANGEROUS if red is placed before yellow
             yellow_placed = yellow_placed or curr_color == Color.YELLOW
