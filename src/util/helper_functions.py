@@ -9,7 +9,7 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 def softmax(z):
-    z_new = np.exp(z[:])
+    z_new = np.exp(z)
     return z_new / sum(z_new)
 
 def relu(z):
