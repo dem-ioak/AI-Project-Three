@@ -45,20 +45,18 @@ class DataSet:
 
 class ImageGenerator:
     """Generates N (M x M) images and writes to data"""
-    def __init__(self, num_images, dimensions = 20, write_path = None, dataset = None, seed = None):
+    def __init__(self, num_images, dimensions = 20, dataset = None, seed = None, task = 1):
         self.dimensions = dimensions
         self.seed = seed
         random.seed(seed)
-        for _ in range(num_images):
-            data, label, third_wire = self.generate(write_path is not None)
-            if dataset is not None:
+        ctr = 0
+        while ctr < num_images:
+            data, label, third_wire = self.generate()
+            if dataset is not None and (not label.value or task == 1):
+                ctr += 1
                 dataset.add_image(data, label, third_wire)
 
-            # TODO: Write to data (may not be necessary, gen is really fast)
-            if write_path is not None:
-                pass
-
-    def generate(self, write_ = False):
+    def generate(self):
         """Generate a single image and label it appropriately"""
         n = self.dimensions
         image_data = np.full((n, n), Color.BLACK.value)

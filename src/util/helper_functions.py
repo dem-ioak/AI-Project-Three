@@ -3,6 +3,8 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 
+from util.Enums import *
+
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
@@ -152,12 +154,8 @@ def preprocess_data_t1(image_data, label_data, processing=None):
 
 def preprocess_data_t2(data, processing=None):
     """Task 2 preprocessing"""
-    image_data, labels_data, third_wire = data.image_data, data.labels, data.third_wires
-    dangerous_images, dangerous_third_wire = [], []
-    for i in range(len(labels_data)):
-        dangerous_images.append(image_data[i])
-        dangerous_third_wire.append(third_wire[i])
-        
+    dangerous_images, _, dangerous_third_wire = data.image_data, data.labels, data.third_wires
+            
     dangerous_images = one_hot_encode(dangerous_images)
     dangerous_third_wire = one_hot_encode(dangerous_third_wire)
     output = dangerous_images.reshape(dangerous_images.shape[0], -1)
