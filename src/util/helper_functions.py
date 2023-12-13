@@ -113,12 +113,14 @@ def row_col_features(image_data):
     row_features = np.sum(image_data, axis=2)
     return np.concatenate([col_features, row_features], axis=1)
 
-def preprocess_data_t1(image_data, label_data, processing=None):
+def preprocess_data_t1(data, processing=None):
     """Uses neither convolution or row_col_features by default (only one_hot encoding)
     
     - Use "convolution" for convolution
     - Use "rc for row_col_features
     - Use "both" for both of those features"""
+    image_data, label_data = data.image_data, data.labels
+
     image_data = one_hot_encode(image_data)
     label_data = np.array(label_data)
     flattened_raw = image_data.reshape(image_data.shape[0], -1)
@@ -147,14 +149,14 @@ def preprocess_data_t1(image_data, label_data, processing=None):
         flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
         flattened_rc_squared = np.square(flattened_rc)
         
-        output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc, flattened_rc_squared], axis = 1)
+        output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc], axis = 1)
 
     flattened_data = np.c_[np.ones(len(output)), output] 
     return flattened_data, label_data
 
 def preprocess_data_t2(data, processing=None):
     """Task 2 preprocessing"""
-    dangerous_images, _, dangerous_third_wire = data.image_data, data.labels, data.third_wires
+    dangerous_images, dangerous_third_wire = data.image_data, data.third_wires
             
     dangerous_images = one_hot_encode(dangerous_images)
     dangerous_third_wire = one_hot_encode(dangerous_third_wire)
