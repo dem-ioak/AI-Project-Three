@@ -141,7 +141,7 @@ def preprocess_data(data, processing=None):
     
     # Apply RC
     if processing in ("rc", "both"):
-        rc_features = row_col_features(image_data)
+        rc_features = row_col_features(image_data)/20
         flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
         flattened_rc_squared = np.square(flattened_rc)
         output = np.concatenate([flattened_raw, flattened_rc, flattened_rc_squared], axis = 1)
@@ -161,7 +161,8 @@ def preprocess_data(data, processing=None):
         flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
         flattened_rc_squared = np.square(flattened_rc)
         
-        output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc], axis = 1)
+        #output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc], axis = 1)
+        output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc, flattened_rc_squared], axis = 1)
 
     flattened_data = np.c_[np.ones(len(output)), output] 
     return flattened_data, label_data, third_wires
