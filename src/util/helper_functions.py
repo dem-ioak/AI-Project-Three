@@ -118,7 +118,8 @@ def preprocess_data_t1(data, processing=None):
     
     - Use "convolution" for convolution
     - Use "rc for row_col_features
-    - Use "both" for both of those features"""
+    - Use "both" for both of those features
+    - Use "noraw" to exclude raw features"""
     image_data, label_data = data.image_data, data.labels
 
     image_data = one_hot_encode(image_data)
