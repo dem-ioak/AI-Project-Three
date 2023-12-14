@@ -139,6 +139,7 @@ def row_col_features(image_data, task):
                     
 
     return np.concatenate([col_features, row_features, output_c18, output_r18, output_c19, output_r19, output_c20, output_r20], axis=1)
+    #return np.concatenate([output_c18, output_r18, output_c19, output_r19, output_c20, output_r20], axis=1)
 def preprocess_data(data, processing=None, task=1):
     """Uses neither convolution or row_col_features by default (only one_hot encoding)
     
