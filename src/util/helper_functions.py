@@ -83,7 +83,6 @@ def apply_convolution(image_data, step_size = 1):
 
     # For every image
     for n in range(num_images):
-
         # For every element of the feature map
         for i in range(output_size):
             for j in range(output_size):
