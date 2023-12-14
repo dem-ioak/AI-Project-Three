@@ -108,23 +108,38 @@ def apply_pooling(image_data, P, mode_ = "max"):
                     output[n, i // P, j // P, c] = func_(region[:, :, c])
     return output
 
-def row_col_features(image_data):
+def row_col_features(image_data, task):
     col_features = np.sum(image_data, axis=1)
     row_features = np.sum(image_data, axis=2)
+    
+    if task==1:
+        return np.concatenate([col_features, row_features], axis=1)
 
     num_images, lw, C = col_features.shape
-    output_c, output_r = np.zeros((num_images, 1,  C)), np.zeros((num_images, 1, C))
+    output_c18, output_r18 = np.zeros((num_images, 1,  C)), np.zeros((num_images, 1, C))
+    output_c19, output_r19 = np.zeros((num_images, 1,  C)), np.zeros((num_images, 1, C))
+    output_c20, output_r20 = np.zeros((num_images, 1,  C)), np.zeros((num_images, 1, C))
     for n in range(num_images):
         for j in range(lw):
             for c in range(C):
+                if col_features[n, j, c] == 18:
+                    output_c18[n, 0] = col_features[n, j]
+                if row_features[n, j, c] == 18:
+                    output_r18[n, 0] = row_features[n, j]
+                    
                 if col_features[n, j, c] == 19:
-                    output_c[n, 0] = col_features[n, j]
+                    output_c19[n, 0] = col_features[n, j]
                 if row_features[n, j, c] == 19:
-                    output_r[n, 0] = row_features[n, j]
+                    output_r19[n, 0] = row_features[n, j]
+                    
+                if col_features[n, j, c] == 20:
+                    output_c20[n, 0] = col_features[n, j]
+                if row_features[n, j, c] == 20:
+                    output_r20[n, 0] = row_features[n, j]
+                    
 
-    return np.concatenate([col_features, row_features, output_c, output_r], axis=1)
-
-def preprocess_data(data, processing=None):
+    return np.concatenate([col_features, row_features, output_c18, output_r18, output_c19, output_r19, output_c20, output_r20], axis=1)
+def preprocess_data(data, processing=None, task=1):
     """Uses neither convolution or row_col_features by default (only one_hot encoding)
     
     - Use "convolution" for convolution
@@ -147,12 +162,12 @@ def preprocess_data(data, processing=None):
         convolved = apply_convolution(image_data, 1)
         pooled = apply_pooling(convolved, 2, "mean")
         flattened_pooled = pooled.reshape(pooled.shape[0], -1)
-        flattened_pooled_squared = np.square(flattened_pooled)  
+        flattened_pooled_squared = np.square(flattened_pooled, )  
         output = np.concatenate([flattened_raw, flattened_pooled, flattened_pooled_squared], axis = 1)
     
     # Apply RC
     if processing in ("rc", "both", "noraw"):
-        rc_features = row_col_features(image_data)/20
+        rc_features = row_col_features(image_data, task=task)/20
         flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
         flattened_rc_squared = np.square(flattened_rc)
         output = np.concatenate([flattened_raw, flattened_rc, flattened_rc_squared], axis = 1)
