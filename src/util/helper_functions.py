@@ -74,7 +74,8 @@ def apply_convolution(image_data, step_size = 1):
     num_images, W, _, C = image_data.shape
     
     # Kernel Initialization
-    kernel = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+    # Laplacian Filter for Edge Detection 
+    kernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
     K = 3
 
     output_size = ((W - K) // step_size) + 1
@@ -89,7 +90,7 @@ def apply_convolution(image_data, step_size = 1):
                 region = image_data[n, i : i + K, j : j + K] # (3, 3, 4) - pixel subregion
                 for c in range(C):
                     output[n, i, j, c] += np.sum(kernel * region[:, :, c])
-    return output
+    return relu(output)
 
 def apply_pooling(image_data, P, mode_ = "max"):
     if mode_ not in ["max", "mean"]:
