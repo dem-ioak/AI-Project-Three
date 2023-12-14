@@ -132,7 +132,7 @@ def preprocess_data(data, processing=None):
     output = np.concatenate([flattened_raw], axis = 1)
     
     # Apply Convolution
-    if processing in ("convolution", "both"):
+    if processing in ("convolution", "both", "noraw"):
         convolved = apply_convolution(image_data, 1)
         pooled = apply_pooling(convolved, 2, "mean")
         flattened_pooled = pooled.reshape(pooled.shape[0], -1)
@@ -140,8 +140,8 @@ def preprocess_data(data, processing=None):
         output = np.concatenate([flattened_raw, flattened_pooled, flattened_pooled_squared], axis = 1)
     
     # Apply RC
-    if processing in ("rc", "both"):
-        rc_features = row_col_features(image_data)/20
+    if processing in ("rc", "both", "noraw"):
+        rc_features = row_col_features(image_data)
         flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
         flattened_rc_squared = np.square(flattened_rc)
         output = np.concatenate([flattened_raw, flattened_rc, flattened_rc_squared], axis = 1)
@@ -152,16 +152,6 @@ def preprocess_data(data, processing=None):
     
     # Exclude raw featured
     if processing == "noraw":
-        convolved = apply_convolution(image_data, 1)
-        pooled = apply_pooling(convolved, 2, "mean")
-        flattened_pooled = pooled.reshape(pooled.shape[0], -1)
-        flattened_pooled_squared = np.square(flattened_pooled)  
-        
-        rc_features = row_col_features(image_data)
-        flattened_rc = rc_features.reshape(rc_features.shape[0], -1)
-        flattened_rc_squared = np.square(flattened_rc)
-        
-        #output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc], axis = 1)
         output = np.concatenate([flattened_pooled, flattened_pooled_squared, flattened_rc, flattened_rc_squared], axis = 1)
 
     flattened_data = np.c_[np.ones(len(output)), output] 
